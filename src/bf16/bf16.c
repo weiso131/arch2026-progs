@@ -4,7 +4,6 @@
 
 #define BF16_NAN 0x7FC0
 #define BF16_INF 0x7F80
-#define BF16_INF_NEG 0xFF80
 #define BF16_ONE 0x80
 
 #define BF16_SIGN 0x8000
@@ -19,10 +18,7 @@ uint16_t bf16_from_f32(uint32_t f32bits)
 {
     if ((f32bits & F32_INF) == F32_INF)
         return (uint16_t) (f32bits >> 16);
-    uint16_t result = (f32bits + 0x7FFF + ((f32bits >> 16) & 1)) >> 16;
-    if ((result & BF16_INF) == BF16_INF)
-        return result & BF16_INF_NEG;
-    return result;
+    return (f32bits + 0x7FFF + ((f32bits >> 16) & 1)) >> 16;
 }
 
 uint16_t bf16_mul(uint16_t a, uint16_t b)
