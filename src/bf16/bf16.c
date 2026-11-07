@@ -51,18 +51,18 @@ uint16_t bf16_mul(uint16_t a, uint16_t b)
 
     if (!a_exp) {
         result_exp++;  // denormal is 0.mantissa x 2^{-126}, so add 1 first
-        for (int i = 0; i < 7 && a_mant < BF16_ONE; ++i) {
+        do {
             result_exp--;
             a_mant <<= 1;
-        }
+        } while (a_mant < BF16_ONE);
         a_mant &= BF16_MANT;
     }
     if (!b_exp) {
         result_exp++;
-        for (int i = 0; i < 7 && b_mant < BF16_ONE; ++i) {
+        do {
             result_exp--;
             b_mant <<= 1;
-        }
+        } while (b_mant < BF16_ONE);
         b_mant &= BF16_MANT;
     }
 
