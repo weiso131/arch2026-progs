@@ -70,22 +70,21 @@ q_mul_check_b_sign:
     xor     a1, a1, t1
     addi    a1, a1, 1
 q_mul_loop:
-    and     t2, a0, t0 # a_top
     andi    t3, a1, 1
     beq     t3, x0, q_mul_loop_not_add # if (ub & 1)
     add     a2, a2, a4
     addi    t3, a3, 0  # origin_bottom
     add     a3, a3, a0 # bottom += ua
     xor     t4, a3, t1 # ~bottom
-    or      t5, t2, t3
+    or      t5, a0, t3
     and     t5, t5, t4
-    and     t4, t2, t3
+    and     t4, a0, t3
     or      t4, t4, t5
     srli    t4, t4, 31
     add     a2, a2, t4
 q_mul_loop_not_add:
     slli    a4, a4, 1
-    beq     t2, x0, q_mul_loop_no_carry
+    bge     a0, x0, q_mul_loop_no_carry
     addi    a4, a4, 1
 q_mul_loop_no_carry:
     slli    a0, a0, 1
