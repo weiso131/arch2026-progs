@@ -53,6 +53,62 @@ op3_asm:
     .type   q_mul_asm, @function
     .align  2
 q_mul_asm:
-    li      a0, 0
+    addi    a2, x0, 0  # top
+    addi    a3, x0, 0  # bottom
+    addi    a4, x0, 0  # top_a
+    li      t0, 0x80000000 
+    li      t1, 0xFFFFFFFF
+    and     a5, a0, t0 # a_sign
+    and     a6, a1, t0 # b_sign
+
+q_mul_check_a_sign:
+    beq     a5, x0, q_mul_check_b_sign
+    xor     a0, a0, t1
+    addi    a0, a0, 1
+q_mul_check_b_sign:
+    beq     a6, x0, q_mul_loop
+    xor     a1, a1, t1
+    addi    a1, a1, 1
+q_mul_loop:
+    beq     a1, x0, q_mul_loop_end
+    and     t2, a0, t0 # a_top
+    andi    t3, a1, 1
+    beq     t3, x0, q_mul_loop_not_add # if (ub & 1)
+    add     a2, a2, a4
+    addi    t3, a3, 0  # origin_bottom
+    add     a3, a3, a0 # bottom += ua
+    xor     t4, a3, t1 # ~bottom
+    or      t5, t2, t3
+    and     t5, t5, t4
+    and     t4, t2, t3
+    or      t4, t4, t5
+    srli    t4, t4, 31
+    add     a2, a2, t4
+q_mul_loop_not_add:
+    slli    a4, a4, 1
+    beq     t2, x0, q_mul_loop_no_carry
+    addi    a4, a4, 1
+q_mul_loop_no_carry:
+    slli    a0, a0, 1
+    srli    a1, a1, 1
+    j       q_mul_loop
+q_mul_loop_end:
+    xor     a5, a5, a6 # a_sign ^ b_sign
+    beq     a5, x0, q_mul_no_sign
+    xor     a2, a2, t1
+    xor     a3, a3, t1
+q_mul_no_sign:
+    addi    t2, a3, 0
+    srli    a5, a5, 31
+    srli    t0, t0, 12 # (0x80000000 >> 31) << 19
+    or      t0, t0, a5
+    add     a3, a3, t0 # bottom += t0 | a5;
+    xor     t0, a3, t1
+    and     t0, t0, t2
+    srli    t0, t0, 31
+    add     a2, a2, t0
+    slli    a2, a2, 12
+    srli    a3, a3, 20
+    or      a0, a2, a3
     ret
     .size   q_mul_asm, .-q_mul_asm
