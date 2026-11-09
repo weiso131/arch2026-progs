@@ -70,7 +70,6 @@ q_mul_check_b_sign:
     xor     a1, a1, t1
     addi    a1, a1, 1
 q_mul_loop:
-    beq     a1, x0, q_mul_loop_end
     and     t2, a0, t0 # a_top
     andi    t3, a1, 1
     beq     t3, x0, q_mul_loop_not_add # if (ub & 1)
@@ -91,7 +90,7 @@ q_mul_loop_not_add:
 q_mul_loop_no_carry:
     slli    a0, a0, 1
     srli    a1, a1, 1
-    j       q_mul_loop
+    bne     a1, x0, q_mul_loop
 q_mul_loop_end:
     xor     a5, a5, a6 # a_sign ^ b_sign
     beq     a5, x0, q_mul_no_sign
