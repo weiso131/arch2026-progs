@@ -12,9 +12,9 @@
     .align  2
 gcd_u32_asm:
     addi    t0, x0, 0
-gcd_u32_even_loop:
     beq     a0, x0, gcd_u32_return
     beq     a1, x0, gcd_u32_return
+gcd_u32_even_loop:
     or      t1, a0, a1
     andi    t1, t1, 1
     bne     t1, x0, gcd_check_both_already_odd
@@ -24,10 +24,9 @@ gcd_u32_even_loop:
     j       gcd_u32_even_loop
 gcd_check_both_already_odd:
     andi    t1, a1, 1
-    beq     t1, x0, gcd_u32_gcd_check_b_zero
+    beq     t1, x0, gcd_u32_gcd_loop_b_loop
     andi    t1, a0, 1
     bne     t1, x0, gcd_u32_gcd_loop_all_odd
-    beq     a0, x0, gcd_u32_return # a is even here, check is zero or not
 gcd_u32_gcd_loop_a_loop:
     srli    a0, a0, 1
     andi    t1, a0, 1
