@@ -17,19 +17,22 @@ gcd_u32_even_loop:
     beq     a1, x0, gcd_u32_return
     or      t1, a0, a1
     andi    t1, t1, 1
-    bne     t1, x0, gcd_u32_gcd_loop
+    bne     t1, x0, gcd_check_both_already_odd
     srli    a0, a0, 1
     srli    a1, a1, 1
     addi    t0, t0, 1
     j       gcd_u32_even_loop
-gcd_u32_gcd_loop:
-    beq     a0, x0, gcd_u32_return
-    beq     a1, x0, gcd_u32_return
-
+gcd_check_both_already_odd:
     andi    t1, a1, 1
-    beq     t1, x0, gcd_u32_gcd_loop_b_loop
+    beq     t1, x0, gcd_u32_gcd_check_b_zero
     andi    t1, a0, 1
     bne     t1, x0, gcd_u32_gcd_loop_all_odd
+gcd_u32_gcd_loop:
+    beq     a0, x0, gcd_u32_return
+gcd_u32_gcd_check_b_zero:
+    beq     a1, x0, gcd_u32_return
+    andi    t1, a1, 1
+    beq     t1, x0, gcd_u32_gcd_loop_b_loop
 gcd_u32_gcd_loop_a_loop:
     srli    a0, a0, 1
     beq     a0, x0, gcd_u32_return
