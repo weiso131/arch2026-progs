@@ -16,13 +16,13 @@
     .align  2
 op1_asm:
     addi    t0, x0, 0
-op1_asm_loop:
     beq     a1, x0, op1_asm_loop_end
+op1_asm_loop:
     and     t1, a0, a1
     xor     a0, a0, a1
     slli    a1, t1, 1
     addi    t0, t0, 1
-    j       op1_asm_loop
+    bne     a1, x0, op1_asm_loop
 op1_asm_loop_end:
     sw      t0, 0(a2)
     ret
