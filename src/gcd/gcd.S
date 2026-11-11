@@ -12,7 +12,7 @@
     .align  2
 gcd_u32_asm:
     addi    t0, x0, 0
-    beq     a0, x0, gcd_u32_return
+    beq     a0, x0, gcd_u32_return_a_is_zero
     beq     a1, x0, gcd_u32_return
 gcd_u32_even_loop:
     or      t1, a0, a1
@@ -47,7 +47,9 @@ gcd_u32_gcd_b_is_bigger:
     sub     a1, a1, a0
     j       gcd_u32_gcd_check_b_zero # b = b - a, a != 0, check b only
 gcd_u32_return:
-    or      a0, a0, a1
     sll     a0, a0, t0
+    ret
+gcd_u32_return_a_is_zero:
+    addi    a0, a1, 0
     ret
     .size   gcd_u32_asm, .-gcd_u32_asm
