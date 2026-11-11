@@ -46,10 +46,10 @@ gcd_u32_gcd_loop_b_loop:
 gcd_u32_gcd_loop_all_odd:
     bgeu     a1, a0, gcd_u32_gcd_b_is_bigger
     sub     a0, a0, a1
-    j       gcd_u32_gcd_loop  # a != b -> a become even and a != 0
+    j       gcd_u32_gcd_loop_a_loop  # a != b -> a become even and a != 0
 gcd_u32_gcd_b_is_bigger:
     sub     a1, a1, a0
-    j       gcd_u32_gcd_loop
+    j       gcd_u32_gcd_check_b_zero # b = b - a, a != 0, check b only
 gcd_u32_return:
     or      a0, a0, a1
     sll     a0, a0, t0
