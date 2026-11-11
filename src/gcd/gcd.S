@@ -32,8 +32,6 @@ gcd_u32_gcd_loop_a_loop:
     andi    t1, a0, 1
     beq     t1, x0, gcd_u32_gcd_loop_a_loop
     j       gcd_u32_gcd_loop_all_odd
-gcd_u32_gcd_check_b_zero:
-    beq     a1, x0, gcd_u32_return
 gcd_u32_gcd_loop_b_loop:
     srli    a1, a1, 1
     andi    t1, a1, 1
@@ -45,7 +43,7 @@ gcd_u32_gcd_loop_all_odd:
     j       gcd_u32_gcd_loop_a_loop  # a != b -> a become even and a != 0
 gcd_u32_gcd_b_is_bigger:
     sub     a1, a1, a0
-    j       gcd_u32_gcd_check_b_zero # b = b - a, a != 0, check b only
+    bne     a1, x0, gcd_u32_gcd_loop_b_loop # b = b - a, a != 0, check b only
 gcd_u32_return:
     sll     a0, a0, t0
     ret
