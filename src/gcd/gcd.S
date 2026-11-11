@@ -27,17 +27,14 @@ gcd_check_both_already_odd:
     beq     t1, x0, gcd_u32_gcd_check_b_zero
     andi    t1, a0, 1
     bne     t1, x0, gcd_u32_gcd_loop_all_odd
-gcd_u32_gcd_loop:
-    beq     a0, x0, gcd_u32_return
-gcd_u32_gcd_check_b_zero:
-    beq     a1, x0, gcd_u32_return
-    andi    t1, a1, 1
-    beq     t1, x0, gcd_u32_gcd_loop_b_loop
+    beq     a0, x0, gcd_u32_return # a is even here, check is zero or not
 gcd_u32_gcd_loop_a_loop:
     srli    a0, a0, 1
     andi    t1, a0, 1
     beq     t1, x0, gcd_u32_gcd_loop_a_loop
     j       gcd_u32_gcd_loop_all_odd
+gcd_u32_gcd_check_b_zero:
+    beq     a1, x0, gcd_u32_return
 gcd_u32_gcd_loop_b_loop:
     srli    a1, a1, 1
     andi    t1, a1, 1
